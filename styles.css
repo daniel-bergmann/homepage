@@ -1,0 +1,22 @@
+body {
+  font-family: "Helvetica Neue", sans-serif;
+  text-rendering: optimizeLegibility;
+}
+#main {
+  width: 700px;
+}
+#widgets td {
+  vertical-align: top;
+}
+p {
+  font-size: 10px;
+  color: grey;
+}
+.langnav {
+  margin-bottom: 20px;
+}
+.langnav a {
+  margin-right: 10px;
+  font-size: 10px;
+  text-decoration: none;
+}
