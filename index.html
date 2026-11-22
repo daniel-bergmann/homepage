@@ -60,11 +60,85 @@
 
       <h1>Life is more than work</h1>
 
-      --coming soon--
+      <br /><br />
+
+      <p>Daily chess puzzle</p>
+
+      <div id="puzzle">
+        <div id="puzzle-board"></div>
+        <p class="turn">
+          <img id="puzzle-turn-img" width="32" height="32" alt="To move" />
+        </p>
+      </div>
 
       <br /><br />
       EOF
       <br /><br />
     </div>
+
+    <script>
+      (function () {
+        var PIECE_URL = "https://lichess1.org/assets/piece/merida/";
+        var board = document.getElementById("puzzle-board");
+        var turnImg = document.getElementById("puzzle-turn-img");
+
+        function renderBoard(fen) {
+          var placement = fen ? fen.split(" ")[0] : "8/8/8/8/8/8/8/8";
+          var ranks = placement.split("/");
+
+          board.innerHTML = "";
+
+          for (var row = 0; row < 8; row++) {
+            var file = 0;
+            var rank = ranks[row];
+
+            for (var i = 0; i < rank.length; i++) {
+              var ch = rank.charAt(i);
+              var count = ch >= "1" && ch <= "8" ? parseInt(ch, 10) : 1;
+
+              for (var n = 0; n < count; n++) {
+                var square = document.createElement("div");
+                square.className =
+                  "square" + ((row + file) % 2 === 1 ? " dark" : "");
+
+                if (!(ch >= "1" && ch <= "8")) {
+                  var piece = document.createElement("img");
+                  piece.src =
+                    PIECE_URL +
+                    (ch === ch.toUpperCase() ? "w" : "b") +
+                    ch.toUpperCase() +
+                    ".svg";
+                  piece.alt = ch;
+                  square.appendChild(piece);
+                }
+
+                board.appendChild(square);
+                file++;
+              }
+            }
+          }
+        }
+
+        async function load() {
+          try {
+            var response = await fetch("https://lichess.org/api/puzzle/daily");
+            if (!response.ok) throw new Error("HTTP " + response.status);
+            var data = await response.json();
+            var puzzle = data.puzzle;
+
+            renderBoard(puzzle.fen);
+
+            var whiteToMove = puzzle.fen.split(" ")[1] === "w";
+            turnImg.src = PIECE_URL + (whiteToMove ? "wK.svg" : "bK.svg");
+            turnImg.alt = whiteToMove ? "White to move" : "Black to move";
+          } catch (error) {
+            turnImg.style.display = "none";
+          }
+        }
+
+        renderBoard(null);
+        load();
+      })();
+    </script>
   </body>
 </html>

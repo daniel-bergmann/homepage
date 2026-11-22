@@ -20,3 +20,54 @@ p {
   font-size: 10px;
   text-decoration: none;
 }
+
+/* Daily chess puzzle - simple board (same look as the dash app) */
+#puzzle-board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-auto-rows: 1fr;
+  width: 320px;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #888888;
+  box-sizing: border-box;
+}
+
+#puzzle-board .square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#puzzle-board .square img {
+  width: 90%;
+  height: 90%;
+}
+
+#puzzle-board .square.dark {
+  background-image: repeating-linear-gradient(
+    135deg,
+    #888888 0,
+    #888888 1px,
+    #ffffff 1px,
+    #ffffff 2px
+  );
+}
+
+.turn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  line-height: 1;
+  color: #000;
+}
+
+.turn img {
+  display: block;
+}
+
+@media (max-width: 600px) {
+  #puzzle-board {
+    width: min(96vw, 70vh);
+  }
+}
